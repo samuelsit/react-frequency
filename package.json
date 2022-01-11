@@ -1,5 +1,5 @@
 {
-	"name": "react-frequency",
+	"name": "@samuelsit/react-frequency",
 	"version": "1.0.0",
 	"description": "A simple React component which creates a frequency and play it !",
 	"main": "dist/cjs/index.js",

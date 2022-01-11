@@ -39,7 +39,7 @@ const Frequency = ({ type, gain, frequency }: IFrequency) => {
 	}, [contextAudio, setContextAudio]);
 
 	useEffect(() => {
-		start();
+		if (gain >= 0 && gain <= 1) start();
 		return () => {
 			stop();
 		};
