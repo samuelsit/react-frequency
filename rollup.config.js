@@ -25,11 +25,12 @@ export default [
 			commonjs(),
 			typescript({ tsconfig: './tsconfig.json' }),
 		],
+		external: ['react'],
 	},
 	{
 		input: 'dist/esm/types/index.d.ts',
 		output: [{ file: 'dist/index.d.ts', format: 'esm' }],
 		plugins: [dts()],
-		external: ['react', 'react-dom'],
+		external: ['react'],
 	},
 ];
