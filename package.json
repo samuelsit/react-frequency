@@ -17,7 +17,11 @@
 		"url": "git+https://github.com/samuelsit/react-frequency.git"
 	},
 	"keywords": [
-		"frequency"
+		"frequency",
+		"react",
+		"audiocontext",
+		"audio",
+		"oscillator"
 	],
 	"author": "Samuel Sitruk",
 	"license": "MIT",
