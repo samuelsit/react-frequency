@@ -2,15 +2,21 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { UseStateCallback } from '../../hooks/UseStateCallback';
 
 interface IFrequency {
-	type: 'center' | 'left' | 'right';
-	gain: number;
-	frequency: number;
+	type?: 'center' | 'left' | 'right';
+	oscillator?: 'sine' | 'square' | 'sawtooth' | 'triangle';
+	gain?: number;
+	hz: number;
+	onStart?: CallableFunction;
+	onStop?: CallableFunction;
 }
 
 const Frequency = ({
 	type = 'center',
+	oscillator = 'sine',
 	gain = 1,
-	frequency = 174,
+	hz,
+	onStart,
+	onStop,
 }: IFrequency) => {
 	const [contextAudio, setContextAudio] = UseStateCallback(null);
 	const [o, setO] = useState<OscillatorNode | null>(null);
@@ -43,27 +49,42 @@ const Frequency = ({
 	}, [contextAudio, setContextAudio]);
 
 	useEffect(() => {
-		start();
+		if (!onStart) start();
 		return () => {
-			stop();
+			if (!onStop) stop();
 		};
-	}, [start, stop]);
+	}, [start, stop, onStart, onStop]);
 
 	useEffect(() => {
-		if (contextAudio && contextAudio.destination && gr && gl && o && merger) {
-			o.type = 'sine';
+		if (onStart) {
+			onStart(start());
+		}
+	}, [onStart]);
+
+	useEffect(() => {
+		if (onStop) {
+			onStop(stop());
+		}
+	}, [onStop]);
+
+	useEffect(() => {
+		if (contextAudio?.destination && gr && gl && o && merger) {
 			o.connect(gl);
 			o.connect(gr);
 			gr.connect(merger, 0, 1);
 			gl.connect(merger, 0, 0);
-			merger.connect(contextAudio.destination);
+			merger.connect(contextAudio?.destination);
 			o.start(0);
 		}
-	}, [contextAudio, gr, gl, o, merger]);
+	}, [contextAudio?.destination, gr, gl, o, merger]);
 
 	useEffect(() => {
-		if (o) o.frequency.value = frequency;
-	}, [frequency, o]);
+		if (o && hz) o.frequency.value = hz;
+	}, [hz, o]);
+
+	useEffect(() => {
+		if (o && oscillator) o.type = oscillator;
+	}, [oscillator, o]);
 
 	useEffect(() => {
 		if (gl) gl.gain.value = type === 'left' || type === 'center' ? gain : 0;
