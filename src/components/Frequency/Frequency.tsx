@@ -6,8 +6,6 @@ interface IFrequency {
 	oscillator?: 'sine' | 'square' | 'sawtooth' | 'triangle';
 	gain?: number;
 	hz: number;
-	onStart?: CallableFunction;
-	onStop?: CallableFunction;
 }
 
 const Frequency = ({
@@ -15,8 +13,6 @@ const Frequency = ({
 	oscillator = 'sine',
 	gain = 1,
 	hz,
-	onStart,
-	onStop,
 }: IFrequency) => {
 	const [contextAudio, setContextAudio] = UseStateCallback(null);
 	const [o, setO] = useState<OscillatorNode | null>(null);
@@ -49,23 +45,11 @@ const Frequency = ({
 	}, [contextAudio, setContextAudio]);
 
 	useEffect(() => {
-		if (!onStart) start();
+		start();
 		return () => {
-			if (!onStop) stop();
+			stop();
 		};
-	}, [start, stop, onStart, onStop]);
-
-	useEffect(() => {
-		if (onStart) {
-			onStart(start());
-		}
-	}, [onStart]);
-
-	useEffect(() => {
-		if (onStop) {
-			onStop(stop());
-		}
-	}, [onStop]);
+	}, [start, stop]);
 
 	useEffect(() => {
 		if (contextAudio?.destination && gr && gl && o && merger) {
