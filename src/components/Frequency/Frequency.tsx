@@ -7,7 +7,11 @@ interface IFrequency {
 	frequency: number;
 }
 
-const Frequency = ({ type, gain, frequency }: IFrequency) => {
+const Frequency = ({
+	type = 'center',
+	gain = 1,
+	frequency = 174,
+}: IFrequency) => {
 	const [contextAudio, setContextAudio] = UseStateCallback(null);
 	const [o, setO] = useState<OscillatorNode | null>(null);
 	const [gl, setGl] = useState<GainNode | null>(null);
