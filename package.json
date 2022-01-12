@@ -1,6 +1,6 @@
 {
 	"name": "react-frequency",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "A simple React component which creates a frequency and play it !",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
