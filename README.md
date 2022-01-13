@@ -72,7 +72,7 @@ const App = () => (
   />
 );
 ```
-The component does not return any elements and emits automaticlly the frequency.<br/>
+The component does not return any elements and emits automatically the frequency.<br/>
 
 <br/>
 
