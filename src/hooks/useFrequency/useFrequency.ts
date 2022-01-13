@@ -34,7 +34,10 @@ function useFrequency({
 		ctxRef.current = ctx;
 		ctx.suspend();
 
-		return () => o.disconnect(ctx.destination);
+		return () => {
+			stop();
+			o.disconnect(ctx.destination);
+		};
 	}, [hz, type, oscillator, gain]);
 
 	const toggle = () => {
