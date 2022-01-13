@@ -44,6 +44,8 @@ function useFrequency({
 		};
 	}, [hz, type, oscillator, gain]);
 
+	useEffect(() => () => setLoad(false), []);
+
 	const toggle = () => {
 		if (playing) ctxRef.current?.suspend();
 		else ctxRef.current?.resume();
