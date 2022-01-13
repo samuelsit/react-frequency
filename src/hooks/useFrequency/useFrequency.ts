@@ -7,7 +7,7 @@ function useFrequency({
 	type = 'center',
 	oscillator = 'sine',
 	gain = 1,
-	hz = 174,
+	hz,
 }: IFrequency) {
 	const [playing, setPlaying] = useState(false);
 	const ctxRef = useRef<AudioContext>();
@@ -32,7 +32,6 @@ function useFrequency({
 		o.start();
 
 		ctxRef.current = ctx;
-		ctx.suspend();
 
 		return () => {
 			m.disconnect(ctx.destination);
@@ -40,25 +39,18 @@ function useFrequency({
 	}, [hz, type, oscillator, gain]);
 
 	const toggle = () => {
-		if (playing) {
-			ctxRef.current?.suspend();
-		} else {
-			ctxRef.current?.resume();
-		}
+		if (playing) ctxRef.current?.suspend();
+		else ctxRef.current?.resume();
 		setPlaying((play) => !play);
 	};
 
 	const start = () => {
-		if (!playing) {
-			ctxRef.current?.resume();
-		}
+		if (!playing) ctxRef.current?.resume();
 		setPlaying(true);
 	};
 
 	const stop = () => {
-		if (playing) {
-			ctxRef.current?.suspend();
-		}
+		if (playing) ctxRef.current?.suspend();
 		setPlaying(false);
 	};
 

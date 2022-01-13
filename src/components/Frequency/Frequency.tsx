@@ -6,7 +6,7 @@ const Frequency = ({
 	type = 'center',
 	oscillator = 'sine',
 	gain = 1,
-	hz = 174,
+	hz,
 }: IFrequency) => {
 	const { start, stop } = useFrequency({
 		type,
