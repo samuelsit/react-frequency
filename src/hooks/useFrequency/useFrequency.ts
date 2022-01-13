@@ -10,41 +10,52 @@ function useFrequency({
 	hz,
 }: IFrequency) {
 	const [playing, setPlaying] = useState(false);
-	const [load, setLoad] = useState(false);
 	const ctxRef = useRef<AudioContext>();
+	const o = useRef<OscillatorNode>();
+	const gL = useRef<GainNode>();
+	const gR = useRef<GainNode>();
 
 	useEffect(() => {
 		const ctx = new AudioContext();
-		const o = ctx.createOscillator();
-		const gL = ctx.createGain();
-		const gR = ctx.createGain();
+		const oscillator = ctx.createOscillator();
+		const gainL = ctx.createGain();
+		const gainR = ctx.createGain();
 		const m = ctx.createChannelMerger(2);
 
-		o.type = oscillator;
-		o.frequency.value = hz;
-		gL.gain.value = type === 'left' || type === 'center' ? gain : 0;
-		gR.gain.value = type === 'right' || type === 'center' ? gain : 0;
-
-		o.connect(gL);
-		o.connect(gR);
-		gR.connect(m, 0, 1);
-		gL.connect(m, 0, 0);
+		oscillator.connect(gainL);
+		oscillator.connect(gainR);
+		gainR.connect(m, 0, 1);
+		gainL.connect(m, 0, 0);
 		m.connect(ctx.destination);
-		o.start();
+		oscillator.start();
+
+		o.current = oscillator;
+		gL.current = gainL;
+		gR.current = gainR;
 
 		ctxRef.current = ctx;
-		if (!load) {
-			ctx.suspend();
-			setLoad(true);
-		}
+		ctx.suspend();
 
 		return () => {
 			m.disconnect(ctx.destination);
 			ctx.close();
 		};
-	}, [hz, type, oscillator, gain]);
+	}, []);
 
-	useEffect(() => () => setLoad(false), []);
+	useEffect(() => {
+		if (o.current) o.current.type = oscillator;
+	}, [oscillator]);
+
+	useEffect(() => {
+		if (o.current) o.current.frequency.value = hz;
+	}, [hz]);
+
+	useEffect(() => {
+		if (gL.current)
+			gL.current.gain.value = type === 'left' || type === 'center' ? gain : 0;
+		if (gR.current)
+			gR.current.gain.value = type === 'right' || type === 'center' ? gain : 0;
+	}, [type, gain]);
 
 	const toggle = () => {
 		if (playing) ctxRef.current?.suspend();
