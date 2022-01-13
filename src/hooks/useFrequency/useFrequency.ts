@@ -54,7 +54,7 @@ function useFrequency({
 		setPlaying(false);
 	};
 
-	return { toggle, start, stop };
+	return { toggle, start, stop, playing };
 }
 
 export default useFrequency;
