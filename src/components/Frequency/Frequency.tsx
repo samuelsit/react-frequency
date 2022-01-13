@@ -22,14 +22,17 @@ const Frequency = ({
 
 	const start = useCallback(() => {
 		if (!contextAudio) {
-			setContextAudio(new AudioContext(), (c: AudioContext) => {
-				c.resume().then(() => {
-					setO(c.createOscillator());
-					setGl(c.createGain());
-					setGr(c.createGain());
-					setMerger(c.createChannelMerger(2));
-				});
-			});
+			setContextAudio(
+				new (window.AudioContext || window.webkitAudioContext)(),
+				(c: AudioContext) => {
+					c.resume().then(() => {
+						setO(c.createOscillator());
+						setGl(c.createGain());
+						setGr(c.createGain());
+						setMerger(c.createChannelMerger(2));
+					});
+				}
+			);
 		}
 	}, [contextAudio, setContextAudio]);
 
