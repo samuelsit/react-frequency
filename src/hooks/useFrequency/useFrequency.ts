@@ -10,6 +10,7 @@ function useFrequency({
 	hz,
 }: IFrequency) {
 	const [playing, setPlaying] = useState(false);
+	const [load, setLoad] = useState(false);
 	const ctxRef = useRef<AudioContext>();
 
 	useEffect(() => {
@@ -32,9 +33,14 @@ function useFrequency({
 		o.start();
 
 		ctxRef.current = ctx;
+		if (!load) {
+			ctx.suspend();
+			setLoad(true);
+		}
 
 		return () => {
 			m.disconnect(ctx.destination);
+			ctx.close();
 		};
 	}, [hz, type, oscillator, gain]);
 
