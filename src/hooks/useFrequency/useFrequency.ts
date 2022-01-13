@@ -35,8 +35,7 @@ function useFrequency({
 		ctx.suspend();
 
 		return () => {
-			stop();
-			o.disconnect(ctx.destination);
+			m.disconnect(ctx.destination);
 		};
 	}, [hz, type, oscillator, gain]);
 

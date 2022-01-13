@@ -8,7 +8,7 @@ const Frequency = ({
 	gain = 1,
 	hz = 174,
 }: IFrequency) => {
-	const { start } = useFrequency({
+	const { start, stop } = useFrequency({
 		type,
 		oscillator,
 		gain,
@@ -17,7 +17,8 @@ const Frequency = ({
 
 	useEffect(() => {
 		start();
-	}, [start]);
+		return stop;
+	}, [start, stop]);
 
 	return <></>;
 };
