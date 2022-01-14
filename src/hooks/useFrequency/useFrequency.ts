@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IFrequency from '../../interface/IFrequency';
 
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-
 function useFrequency({
 	type = 'center',
 	oscillator = 'sine',
@@ -16,6 +14,8 @@ function useFrequency({
 	const gR = useRef<GainNode>();
 
 	useEffect(() => {
+		const AudioContext = window.AudioContext || window.webkitAudioContext;
+
 		const ctx = new AudioContext();
 		const oscillator = ctx.createOscillator();
 		const gainL = ctx.createGain();
